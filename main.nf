@@ -15,7 +15,7 @@ nextflow.enable.dsl=2
 include { validate_primer_scheme } from './modules/utils'
 include { get_fastq_gather } from './modules/utils'
 include { get_fastq_dirs } from './modules/utils'
-includ  { get_samples } from './modules/utils'
+include { get_samples } from './modules/utils'
 
 include { ArticNanoq } from './modules/artic'
 include { ArticMinion } from './modules/artic'
