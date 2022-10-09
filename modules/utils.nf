@@ -160,14 +160,12 @@ def get_samples(fastq_dir, fastq_ext, sample_sheet){
 
     fastq_files = channel.fromPath(sample_sheet) | splitCsv(header:true) | map { row -> 
 
-        barcode = row[0]
-        sample_name = row[1]
-        barcode_dir = new File("${fastq_dir}/${barcode}")
+        barcode_dir = new File("${fastq_dir}/${row.barcode}")
 
         println("Ingesting: $row $barcode $sample_name $barcode_dir")
 
         if (!barcode_dir.exists()){
-            println("Barcode directory does not exist: ${barcode} -> ${sample_name}")
+            println("Barcode directory does not exist: ${row.barcode} -> ${sample_name}")
             return 
         }
 
@@ -180,7 +178,7 @@ def get_samples(fastq_dir, fastq_ext, sample_sheet){
 
         if (files) {
             println("Found sample directory: ${dir.baseName} (number of files: ${files.size()})")
-            return tuple(sample_name, files) 
+            return tuple(row.sample_id, files) 
         }
     
     }
