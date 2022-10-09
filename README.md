@@ -53,7 +53,7 @@ nextflow run esteinig/artic-vidrl -profile conda (--mamba true | --micromamba tr
 A single sample can be gathered from one or multiple files using a wildcard pattern (e.g. from a barcode directory as output by `Guppy`). Note the required quotation marks around the pattern, so that the shell does not intepret the wildcard. An output sample identifier (`--fastq_id`) must be provided.
 
 ```
-nextflow run esteinig/artic-vidrl -profile conda \
+nextflow run vidrl/artic-vidrl -profile conda \
     --scheme_dir EBOV/V1 \
     --medaka_model "r941_min_high_g360" \
     --fastq_gather "fastq/*.fastq.gz" \
@@ -66,7 +66,7 @@ nextflow run esteinig/artic-vidrl -profile conda \
 Multiple samples in subdirectories (e.g. demultiplexed barcode directories) can be run by specifying the parent directory and the extension of files to gather in each subdirectory:
 
 ```
-nextflow run esteinig/artic-vidrl -profile conda \
+nextflow run vidrl/artic-vidrl -profile conda \
     --scheme_dir EBOV/V1 \
     --medaka_model "r941_min_high_g360" \
     --fastq_dir read_dir \
@@ -82,9 +82,31 @@ read_dir/{subdir}/{read_files}.fastq.gz
 
 Output identifiers for each sample is the names of the subdirectory.
 
-### Barcodes
+#### Sample sheet
 
-When running on demultiplexed barcode outputs, not all barcode subdirectories may be relevant. You can specify a dashed range or a comma-delimited list of barcode numbers (`int`-format: 1, 2, ... 10, 11) that subsets the subdirectories:
+For multiple samples an optional two column, comma-delimited `--sample_sheet` can be provided, which subsets the barcode directories and replaces sample identifiers with specified names. Sample identifiers must not contain whitespaces:
+
+```
+barcode,sample_id
+barcode01,Sample-0001
+barcode02,Sample-0002
+```
+
+Input is then in addition to the `--fastq_dir` and `--fastq_ext` options:
+
+```
+nextflow run vidrl/artic-vidrl -profile conda \
+    --scheme_dir EBOV/V1 \
+    --medaka_model "r941_min_high_g360" \
+    --fastq_dir read_dir \
+    --fastq_ext ".fastq.gz" \
+    --sample_sheet samples.csv \
+    --outdir test_multiple 
+```
+
+#### Barcodes
+
+When running on demultiplexed barcode outputs without sample sheets, not all barcode subdirectories may be relevant. You can specify a dashed range or a comma-delimited list of barcode numbers (`int`-format: 1, 2, ... 10, 11) that subsets the subdirectories:
 
 ```
 --barcodes "1-21"
@@ -152,7 +174,7 @@ conda activate artic-vidrl
 Default is the `local` executor in the workflow, run without the profile option:
 
 ```
-nextflow run esteinig/artic-vidrl \
+nextflow run vidrl/artic-vidrl \
     --scheme_dir EBOV/V1 \
     --medaka_model "r941_min_high_g360" \ 
     --fastq_gather "fastq/*.fastq.gz" \
@@ -162,7 +184,7 @@ nextflow run esteinig/artic-vidrl \
 Alternatively point the workflow directly at the path of the local `conda` environment, e.g.
 
 ```
-nextflow run esteinig/artic-vidrl \
+nextflow run vidrl/artic-vidrl \
     --conda_env /data/opt/conda/envs/artic-vidrl \
     --scheme_dir EBOV/V1 \
     --medaka_model "r941_min_high_g360" \ 
@@ -173,5 +195,6 @@ nextflow run esteinig/artic-vidrl \
 
 ## Change log
 
+- Added `--sample_sheet` ingestion subsets
 - Added final alignment optional flag to `artic_minion.py`
 - Version update: added a wheel file for `artic-v1.2.2` including a `pip` directive in `environment.yml` (this fork) so that we can update `longshot=0.4.5` in `environment.yml` and still install `artic` within the conda handler of Nextflow. it was not possible to use a reduced environment file that specified both `artic=1.2.2` and `longshot=0.4.5`, because of conflict with the `longshot=0.4.1` requirement in `artic=1.2.2`. Also added `nanoq=0.9.0` as dependency for a simple (and more flexible) replacement of `artic gather`.
