@@ -162,7 +162,6 @@ def get_samples(fastq_dir, fastq_ext, sample_sheet){
 
         barcode_dir = new File("${fastq_dir}/${row.barcode}")
 
-        println("Ingesting: $row $barcode $sample_name $barcode_dir")
 
         if (!barcode_dir.exists()){
             println("Barcode directory does not exist: ${row.barcode} -> ${sample_name}")
@@ -177,7 +176,7 @@ def get_samples(fastq_dir, fastq_ext, sample_sheet){
         }
 
         if (files) {
-            println("Found sample directory: ${dir.baseName} (number of files: ${files.size()})")
+            println("Found sample directory: ${row.barcode} -> ${row.sample_id} (number of files: ${files.size()})")
             return tuple(row.sample_id, files) 
         }
     

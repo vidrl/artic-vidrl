@@ -150,7 +150,7 @@ process ArticParams {
     "version": "$params.version",
     "fastq_gather": "$params.fastq_gather",
     "fastq_id": "$params.fastq_id",
-    "fastq_dirs": "$params.fastq_dirs",
+    "fastq_dir": "$params.fastq_dir",
     "fastq_ext": "$params.fastq_ext",
     "barcodes": "$params.barcodes",
     "sample_sheet": "$params.sample_sheet",
