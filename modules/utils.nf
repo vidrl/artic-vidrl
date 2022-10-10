@@ -160,7 +160,7 @@ def get_samples(fastq_dir, fastq_ext, sample_sheet){
 
     fastq_files = channel.fromPath(sample_sheet) | splitCsv(header:true) | map { row -> 
 
-        barcode_dir = new File("${fastq_dir}/${row.barcode}")
+        barcode_dir = file("${fastq_dir}/${row.barcode}")
 
 
         if (!barcode_dir.exists()){
