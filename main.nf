@@ -12,14 +12,14 @@ ARTIC-VIDRL workflow
 nextflow.enable.dsl=2
 
 
-include { validate_primer_scheme } from './modules/utils'
-include { get_fastq_files } from './modules/utils'
+include { validate_primer_scheme } from './modules/artic/utils'
+include { get_fastq_files } from './modules/artic/utils'
 
-include { ArticNanoq } from './modules/artic'
-include { ArticMinion } from './modules/artic'
-include { ArticCovtobed } from './modules/artic'
-include { ArticReport } from './modules/artic'
-include { ArticParams } from './modules/artic'
+include { ArticNanoq } from './modules/artic/artic'
+include { ArticMinion } from './modules/artic/artic'
+include { ArticCovtobed } from './modules/artic/artic'
+include { ArticReport } from './modules/artic/artic'
+include { ArticParams } from './modules/artic/artic'
 
 workflow {
 
@@ -38,7 +38,7 @@ workflow {
     fastq_ext:        $params.fastq_ext
     barcodes:         $params.barcodes
 
-    scheme_dir:       $params.artic.scheme_dir
+    scheme_dir:       $params.scheme_dir
     medaka_model:     $params.medaka_model
     min_length:       $params.min_length
     max_length:       $params.max_length
@@ -52,11 +52,11 @@ workflow {
         System.exit(1)
     }
 
-    if (!params.artic.scheme_dir){
+    if (!params.scheme_dir){
         println("Please provide a primer scheme directory (--scheme_dir)")
         System.exit(1)
     }
-    (primer_scheme, primer_bed) = validate_primer_scheme(params.artic.scheme_dir)
+    (primer_scheme, primer_bed) = validate_primer_scheme(params.scheme_dir)
     println("Primer scheme directory: ${primer_scheme[0]} (scheme: ${primer_scheme[1]})")
     
 
