@@ -176,7 +176,7 @@ def get_samples(fastq_dir, fastq_ext, sample_sheet){
         }
 
         if (files) {
-            println("Found sample directory: ${row.barcode} -> ${row.sample_id} (number of files: ${files.size()})")
+            // println("Found sample directory: ${row.barcode} -> ${row.sample_id} (number of files: ${files.size()})")
             return tuple(row.sample_id, files) 
         }
     
