@@ -38,7 +38,7 @@ workflow {
     fastq_ext:        $params.fastq_ext
     barcodes:         $params.barcodes
 
-    scheme_dir:       $params.scheme_dir
+    scheme_dir:       $params.artic.scheme_dir
     medaka_model:     $params.medaka_model
     min_length:       $params.min_length
     max_length:       $params.max_length
@@ -52,11 +52,11 @@ workflow {
         System.exit(1)
     }
 
-    if (!params.scheme_dir){
+    if (!params.artic.scheme_dir){
         println("Please provide a primer scheme directory (--scheme_dir)")
         System.exit(1)
     }
-    (primer_scheme, primer_bed) = validate_primer_scheme(params.scheme_dir)
+    (primer_scheme, primer_bed) = validate_primer_scheme(params.artic.scheme_dir)
     println("Primer scheme directory: ${primer_scheme[0]} (scheme: ${primer_scheme[1]})")
     
 
