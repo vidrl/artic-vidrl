@@ -91,8 +91,6 @@ workflow {
         System.exit(1)
     }
 
-    fastq_files | view
-
     artic_nanoq = ArticNanoq(
         fastq_files
     )
