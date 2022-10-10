@@ -171,7 +171,7 @@ def get_samples(fastq_dir, fastq_ext, sample_sheet){
         def files = []
         barcode_dir.eachFile { file -> 
             if (file.getName().endsWith("${fastq_ext}")){
-                files << new file(file)
+                files << file(file)
             }
         }
 
