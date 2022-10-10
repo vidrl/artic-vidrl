@@ -183,7 +183,7 @@ def get_samples(fastq_dir, fastq_ext, sample_sheet){
     }
 
     fastq_files | ifEmpty { exit 1, "Could not find any suitable subdirectories specified in sample sheet" }
-    println(fastq_files)
+    fastq_files | view
     return fastq_files
 
 }
