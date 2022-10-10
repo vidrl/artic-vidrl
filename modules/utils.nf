@@ -7,7 +7,7 @@ def check_file(file_path) {
     return file(file_path)
 }
 
-// Helper function to check if the primer scheme direcotry
+// Helper function to check if the primer scheme directory
 // conforms to required formatting - this is the same check
 // that is conducted in `minion.py` but fails before the 
 // pipeline is run and does not trigger an obscure download
@@ -58,7 +58,7 @@ def validate_primer_scheme(file_path) {
     // println("Primer scheme name: $scheme_name")
     // println("Primer scheme version: $version")
 
-    return [file(primer_scheme_base_dir), "${scheme_name}/${primer_version}", file(bed)]
+    return [tuple(file(primer_scheme_base_dir), "${scheme_name}/${primer_version}"), file(bed)]
 
 }
 
@@ -185,5 +185,38 @@ def get_samples(fastq_dir, fastq_ext, sample_sheet){
     fastq_files | ifEmpty { exit 1, "Could not find any suitable subdirectories specified in sample sheet" }
 
     return fastq_files
+
+}
+
+// Wrapper for getting fastq files
+def get_fastq_files(fastq_gather, fastq_id, fastq_dir, fastq_ext, barcodes, sample_sheet){
+
+
+    if (fastq_gather) {
+        println("Collecting read files: $fastq_gather")
+        if (!fastq_id){
+            println("Please provide an output identifier for the sample (--fastq_id)")
+            System.exit(1)
+        }
+        fastq_files = get_fastq_gather(fastq_gather)
+    } else if (fastq_dir) {
+        println("Collecting read files with extension '$fastq_ext' in subdirectories of: $fastq_dir")
+         if (!fastq_ext){
+            println("Please provide a file extension to gather read files in subdirectories (--fastq_ext)")
+            System.exit(1)
+        }
+        if (sample_sheet){
+            println("Collecting read files from sample sheet: $sample_sheet")
+            // Subset barcodes by sample sheet
+            fastq_files = get_samples(fastq_dir, fastq_ext, sample_sheet)
+        } else {
+            // Collect all barcodes
+            fastq_files = get_fastq_dirs(fastq_dir, fastq_ext, barcodes)
+        }
+
+    } else {
+        println("Please provide read file inputs (--fastq_gather | --fastq_dir)")
+        System.exit(1)
+    }
 
 }
