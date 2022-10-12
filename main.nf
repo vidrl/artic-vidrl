@@ -12,14 +12,14 @@ ARTIC-VIDRL workflow
 nextflow.enable.dsl=2
 
 
-include { validate_primer_scheme } from './modules/artic/utils'
-include { get_fastq_files } from './modules/artic/utils'
+include { validate_primer_scheme } from './modules/utils'
+include { get_fastq_files } from './modules/utils'
 
-include { ArticNanoq } from './modules/artic/artic'
-include { ArticMinion } from './modules/artic/artic'
-include { ArticCovtobed } from './modules/artic/artic'
-include { ArticReport } from './modules/artic/artic'
-include { ArticParams } from './modules/artic/artic'
+include { ArticNanoq } from './modules/artic'
+include { ArticMinion } from './modules/artic'
+include { ArticCovtobed } from './modules/artic'
+include { ArticReport } from './modules/artic'
+include { ArticParams } from './modules/artic'
 
 workflow {
 
